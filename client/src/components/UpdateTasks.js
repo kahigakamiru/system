@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-function CreateTasks() {
+
+function UpdateTasks() {
+  const params = useParams();
+
   const [taskName, setTask] = useState();
+  const [_id, setID] = useState();
   const [project_id, setProjectID] = useState();
   const [startDate, setDate] = useState();
   const [endDate, setEnd] = useState();
   const [taskDescription, setDescription] = useState();
   const [data, setData] = useState();
   const Navigate = useNavigate();
-  // console.log(data);
   useEffect(() => {
     setTimeout(async () => {
       await axios({
@@ -21,13 +24,14 @@ function CreateTasks() {
         console.log(res.data[0]);
       });
     }, 1000);
+    console.log(params.task_id);
   }, []);
-  const handleCreateTasks = async (e) => {
+  const handleUpdateTasks = async (e) => {
     e.preventDefault();
-    console.log(project_id);
+    console.log(taskName);
     await axios
-      .post("http://localhost:8000/api/tasks/create", {
-        project_id: project_id,
+      .put("http://localhost:8000/api/tasks/", {
+        _id: params.task_id,
         name: taskName,
         start_date: startDate,
         end_date: endDate,
@@ -42,34 +46,7 @@ function CreateTasks() {
   };
   return (
     <div>
-      <Form onSubmit={(e) => handleCreateTasks(e)}>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>ProjectName</Form.Label>
-          <select
-            name=""
-            id=""
-            selected="select project"
-            onChange={(e) => setProjectID(e.target.value)}
-            required
-          >
-            <option value="" selected>
-              select project
-            </option>
-            {data ? (
-              data.map((dat) => (
-                <option value={dat._id} key={dat.project_id}>
-                  {dat.name} {dat.description}
-                </option>
-              ))
-            ) : (
-              <option value="">no ongoing projects</option>
-            )}
-          </select>
-          <Form.Text className="text-muted">
-            please, provide task name
-          </Form.Text>
-        </Form.Group>
-
+      <Form onSubmit={(e) => handleUpdateTasks(e)}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>TaskName</Form.Label>
           <Form.Control
@@ -118,4 +95,4 @@ function CreateTasks() {
   );
 }
 
-export default CreateTasks;
+export default UpdateTasks;

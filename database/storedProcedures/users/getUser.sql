@@ -12,7 +12,9 @@ begin
 			u.first,
 			u.last,
 			u.email,
-			u.age,
 			u.isAdmin
 	from	[users] u where _id = @userId;
 end;
+
+
+drop proc getUser

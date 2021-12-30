@@ -23,3 +23,4 @@ begin
     @Desc);
 end;
 
+select * from tasks

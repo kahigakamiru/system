@@ -81,7 +81,7 @@ export default function Signup(props) {
           placeholder="First name"
           value={firstname}
           onChange={onChangeFirstname}
-        />
+        required/>
       </div>
 
       <div className="form-group">

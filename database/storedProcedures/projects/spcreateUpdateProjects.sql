@@ -32,3 +32,4 @@ BEGIN
         END
 END;
 GO
+select * from projects

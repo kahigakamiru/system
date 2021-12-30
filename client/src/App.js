@@ -9,9 +9,13 @@ import AuthService from "./services/auth.service";
 import Projects from "./components/projects.components";
 import Tasks from "./components/tasks.components";
 import Users from "./components/Users";
-import Home from "./components/Home"
+import Home from "./components/Home";
 import CreateProjects from "./components/CreateProjects";
 import CreateTasks from "./components/CreateTasks";
+import UpdateTasks from "./components/UpdateTasks";
+import Navbar from "react-bootstrap/Navbar";
+import { Button, Table, Container } from "react-bootstrap";
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -27,7 +31,6 @@ class App extends Component {
 
   componentDidMount() {
     const user = AuthService.getCurrentUser();
-   
 
     if (user) {
       this.setState({
@@ -45,14 +48,13 @@ class App extends Component {
     const { currentUser, showUserDashboard, showAdminDashboard } = this.state;
     return (
       <Router>
-        <div>
-          <nav className="navbar navbar-expand navbar-light bg-light responsive-md">
+        <Container>
+          <Navbar>
             <Link to={"/home"} className="navbar-brand">
               Home
             </Link>
 
             <div className="navbar-nav ml-auto">
-              {/* Add Admin and User DashBoards */}
               {showUserDashboard && (
                 <li className="nav-item">
                   <Link to={"/userdash"} className="nav-link">
@@ -97,9 +99,20 @@ class App extends Component {
                 </li>
               </div>
             )}
-          </nav>
+          </Navbar>
+          {/* <Navbar>
+            <Container>
+              <Navbar.Brand href="#home">Navbar with text</Navbar.Brand>
+              <Navbar.Toggle />
+              <Navbar.Collapse className="justify-content-end">
+                <Navbar.Text>
+                  Signed in as: <a href="#login">Mark Otto</a>
+                </Navbar.Text>
+              </Navbar.Collapse>
+            </Container>
+          </Navbar> */}
 
-          <div className="container mt-3">
+          <div>
             <Routes>
               {/* <Route exact path={["/", "/home"]} component={App} /> */}
               <Route path="/sign-in" element={<Login />} />
@@ -108,8 +121,19 @@ class App extends Component {
               <Route path="/dashboard/tasks" element={<Tasks />} />
               <Route path="/dashboard/projects" element={<Projects />} />
               <Route path="/dashboard/users" element={<Users />} />
-              <Route path="/dashboard/projects/createprojects" element={<CreateProjects />} />
-              <Route path="/dashboard/tasks/createtasks" element={<CreateTasks />} />
+              <Route path="/home" element={<Home />} />
+              <Route
+                path="/dashboard/projects/createprojects"
+                element={<CreateProjects />}
+              />
+              <Route
+                path="/dashboard/tasks/createtasks"
+                element={<CreateTasks />}
+              />
+              <Route
+                path="/dashboard/tasks/updatetasks/:task_id"
+                element={<UpdateTasks />}
+              />
               {/* <Route exact path="/admindash/gettasks" component={GetTasks} />
               <Route
                 exact
@@ -124,7 +148,7 @@ class App extends Component {
               <Route exact path="/admindash/update" component={Updates} /> */}
             </Routes>
           </div>
-        </div>
+        </Container>
       </Router>
     );
   }

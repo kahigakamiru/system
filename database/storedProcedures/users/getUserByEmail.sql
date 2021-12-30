@@ -5,7 +5,9 @@ CREATE OR ALTER PROCEDURE [dbo].[getUserByEmail]
 as
 begin
 	select	_id,
-			password
+			password,
+			email,
+			isAdmin
 	from	[dbo].users  where email = @email;
 end;
 

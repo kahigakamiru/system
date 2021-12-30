@@ -8,7 +8,7 @@ drop table projects
  CREATE TABLE projects (
 	_id varchar(100) NOT NULL PRIMARY KEY,
 	name varchar(250) NOT NULL,
-	lead_user_id varchar(100) DEFAULT NULL,
+	lead_user_id varchar(100),
 	client_name varchar(100),
 	[description] varchar(250) NOT NULL,
 	start_date DATE NOT NULL,
@@ -17,6 +17,9 @@ drop table projects
 	isCompleted BIT NOT NULL,
 	FOREIGN KEY (lead_user_id) REFERENCES users (_id) ON DELETE CASCADE ON UPDATE CASCADE,
 )
+ALTER TABLE projects
+DROP COLUMN client_name
 
-ALTER TABLE projects 
-ALTER COLUMN lead_user_id VARCHAR(100); 
+select * from projects
+select * from tasks
+

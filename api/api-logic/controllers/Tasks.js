@@ -7,8 +7,8 @@ const _ = require("lodash");
 module.exports = {
   getAllTasks: async (req, res) => {
     try {
-      let result = await db.exec("getAllTasks");
-      console.log(result);
+      let result = await db.exec("getTasks");
+      // console.log(result);
       let resultData = result.recordsets;
 
       res.status(200).json(resultData);
@@ -22,7 +22,7 @@ module.exports = {
 
     try {
       let result = await db.exec("getTasks", { project_id: pid });
-      console.log(result);
+      // console.log(result);
       const tasks = result.recordset;
       res.status(200).json({ tasks });
     } catch (error) {
@@ -65,31 +65,20 @@ module.exports = {
       if (!projectResult.recordset[0])
         return res.status(400).send({ message: "invalid project. " });
 
-      const {
-        name,
-        // user_id,
-        project_id,
-        // duration,
-        start_date,
-        end_date,
-        description,
-      } = req.body;
-      const id = uuidv4();
-      // try {
+      const { name, project_id, start_date, end_date, description } = req.body;
+      // const id = uuidv4();
+
       await db.exec("createTask", {
-        id,
         name,
-        // user_id,
         project_id,
-        // duration,
         start_date: new Date(start_date),
         end_date: new Date(end_date),
         description,
       });
       res.send({ message: "Task created successfully" });
     } catch (error) {
-      console.log(error.message);
-      res.status(500).send(error.message);
+      // console.log(error.message);
+      res.status(500).send(error.stack);
     }
   },
 
@@ -97,9 +86,7 @@ module.exports = {
     const { error } = taskValidator(
       _.pick(req.body, [
         "name",
-        // "user_id",
         "project_id",
-        // "duration",
         "start_date",
         "end_date",
         "description",
@@ -115,38 +102,28 @@ module.exports = {
         .send({ success: false, message: error.details[0].message });
 
     try {
-      const {
-        _id,
-        name,
-        user_id,
-        project_id,
-        // duration,
-        start_date,
-        end_date,
-        description,
-      } = req.body;
-
+      const { _id, name, project_id, start_date, end_date, description } =
+        req.body;
+      console.log(req.body);
       await db.exec("updateTask", {
-        _id,
+        id: _id,
         name,
-        user_id,
         project_id,
-        // duration,
         start_date: new Date(start_date),
         end_date: new Date(end_date),
         description,
       });
       res.send({ message: "Task updated successfully" });
     } catch (error) {
-      console.log(error.message);
-      res.status(500).send({ message: "Internal Server Error" });
+      // console.log(error.message);
+      res.status(500).send({ message: error.message });
     }
   },
   deleteTask: async (req, res) => {
     try {
       const { task_id } = req.body;
-      const { project_id } = req.body;
-      const { recordset } = await db.exec("getTask", { task_id, project_id });
+      // const { project_id } = req.body;
+      const { recordset } = await db.exec("getTask", { task_id });
 
       const task = recordset[0];
 
@@ -157,9 +134,10 @@ module.exports = {
         return res.status(404).send({ message: "task already deleted" });
       }
 
-      await db.exec("deleteTask", {
+      const data = await db.exec("deleteTask", {
         task_id,
       });
+      console.log(data);
       res.status(201).send({ message: "task deleted Successfully" });
     } catch (error) {
       res

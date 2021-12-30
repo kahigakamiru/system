@@ -1,7 +1,7 @@
 CREATE OR ALTER PROCEDURE [dbo].[getProjects]
 (
     @project_id varchar(100) = NULL,
-    @user_id varchar(100),
+   
     @PageNumber INT = 0,
     @NumberOfRecordsPerPage INT = 100
 )
@@ -12,7 +12,7 @@ BEGIN
 
 	DECLARE @isAdmin BIT;
 
-	select @isAdmin = isAdmin from dbo.users where _id = @user_id and isDeleted=0;
+	select @isAdmin = isAdmin from dbo.users where isDeleted=0;
 	
 	IF @project_id IS NOT NULL
 	BEGIN
@@ -36,20 +36,15 @@ BEGIN
 			SELECT 
 			DISTINCT p._id pid,
 			p.name,
-			p.lead_user_id,
 			p.start_date,
 			p.end_date,
-			p.client_name,
-			p.team_id
+			p.[description]
 			FROM dbo.projects p 
 			LEFT join 
 			dbo.AssignedProjects ap 
 			on p._id = ap.project_id
 			where 
-			(p.lead_user_id = @user_id
-			or
-			ap.user_id = @user_id)
-			and isDeleted = 0
+			isDeleted = 0
 			order by p._id
 			OFFSET (@PageNumber * @NumberOfRecordsPerPage) ROWS
 			FETCH NEXT @NumberOfRecordsPerPage ROWS ONLY
@@ -58,4 +53,8 @@ BEGIN
 	END
 END
 
-EXEC getProjects @user_id = '2';
+EXEC getProjects 
+
+select * from projects;
+
+DROP PROC getProjects

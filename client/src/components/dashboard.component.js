@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import "./styles.css";
+import { Modal, Form, Table } from "react-bootstrap";
 import Button from "./button";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -38,7 +39,7 @@ export default function Dashboard() {
     }, 1000);
   }, []);
   return (
-    <div className="dashboard">
+    <div>
       {/* <div className="side-menu">
         <div className="brand-name">
           <h1>
@@ -147,7 +148,7 @@ export default function Dashboard() {
                 </Link>
               </div>
               {data ? (
-                <table>
+                <Table>
                   <tr>
                     <th>Name</th>
                     <th>leader</th>
@@ -165,7 +166,7 @@ export default function Dashboard() {
                     </tr>
                   ))}
                   &nbsp;
-                </table>
+                </Table>
               ) : (
                 "no data"
               )}
@@ -178,11 +179,10 @@ export default function Dashboard() {
                 </Link>
               </div>
               {taskData ? (
-                <table>
+                <Table>
                   <tr>
                     <th>UserName</th>
                     <th>projectID</th>
-                    <th>UserId</th>
                     <th>start_date</th>
                     <th>end_date</th>
                     <th>Description</th>
@@ -191,14 +191,13 @@ export default function Dashboard() {
                     <tr>
                       <td>{taskDat.name}</td>
                       <td>{taskDat.project_id}</td>
-                      <td>{taskDat.user_id}</td>
                       <td>{taskDat.start_date}</td>
                       <td>{taskDat.end_date}</td>
                       <td>{taskDat.description}</td>
                     </tr>
                   ))}
                   &nbsp;
-                </table>
+                </Table>
               ) : (
                 "no data"
               )}
