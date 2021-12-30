@@ -3,7 +3,6 @@ CREATE OR ALTER PROCEDURE [dbo].[createTask]
 	@name varchar(100),
 	@project_id varchar(100),
 	@user_id varchar(100),
-	@duration varchar(100),
 	@start_date date,
 	@end_date date,
 	@description varchar(500)
@@ -13,7 +12,7 @@ set nocount on;
 
 begin
 	INSERT INTO dbo.tasks
-	(_id, name, project_id, user_id, start_date, end_date, description, duration, isDeleted, isCompleted)
+	(_id, name, project_id, user_id, start_date, end_date, description, isDeleted, isCompleted)
 	VALUES
-	(@id, @name, @project_id, @user_id, @start_date, @end_date, @description, @duration, 0, 0);
+	(@id, @name, @project_id, @user_id, @start_date, @end_date, @description,  0, 0);
 end;

@@ -10,15 +10,13 @@ import {
 import AuthService from "../../services/auth.service";
 
 export const register =
-  (firstname, lastname, age, gender, isAdmin, email, password) =>
-  (dispatch) => {
+  (firstname, lastname, email, isAdmin, password) => (dispatch) => {
     return AuthService.register(
       firstname,
       lastname,
-      age,
-      gender,
-      isAdmin,
       email,
+      isAdmin,
+
       password
     ).then(
       (response) => {

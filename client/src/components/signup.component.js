@@ -10,9 +10,9 @@ export default function Signup(props) {
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
     const [email, setEmail] = useState("");
-    const [isAdmin, setIsAdmin] = useState(false);
+    // const [isAdmin, setIsAdmin] = useState(false);
     const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+    // const [confirmPassword, setConfirmPassword] = useState("");
     const [successful, setSuccessful] = useState(false);
     
     
@@ -23,15 +23,16 @@ export default function Signup(props) {
     // const firstname = e.target.value;
     setFirstname(e.target.value);
   };
+ 
   const onChangeLastname = (e) => {
     // const lastname = e.target.value;
     setLastname(e.target.value);
   };
 
-  const onChangeIsAdmin = (e) => {
-    // const isAdmin = e.target.checked;
-    setIsAdmin(isAdmin);
-  };
+  // const onChangeIsAdmin = (e) => {
+  //   // const isAdmin = e.target.checked;
+  //   setIsAdmin(isAdmin);
+  // };
 
   const onChangeEmail = (e) => {
     // const email = e.target.value;
@@ -41,10 +42,10 @@ export default function Signup(props) {
     //  const password = e.target.value;
      setPassword(e.target.value);
    };
-   const onChangeConfirmPassword = (e) => {
-     const confirmPassword = e.target.value;
-    setConfirmPassword(confirmPassword);
-   };
+  //  const onChangeConfirmPassword = (e) => {
+  //    const confirmPassword = e.target.value;
+  //   setConfirmPassword(confirmPassword);
+  //  };
   
    const handleRegister = (e) => {
      e.preventDefault();
@@ -55,9 +56,10 @@ export default function Signup(props) {
 
      
        dispatch(
-         register(firstname, lastname,  email, password, confirmPassword)
+         register(firstname, lastname,  email, password)
        )
          .then(() => {
+           Navigate("/login")
            setSuccessful(true);
          })
          .catch(() => {
@@ -128,7 +130,7 @@ export default function Signup(props) {
           
         />
       </div>
-      <div className="form-group">
+      {/* <div className="form-group">
         <label>confirmPassword</label>
         <input
           type="password"
@@ -137,13 +139,13 @@ export default function Signup(props) {
           value={confirmPassword}
           onChange={onChangeConfirmPassword}
         />
-      </div>
+      </div> */}
 
       <button type="submit" className="btn btn-dark btn-lg btn-block">
         Register
       </button>
       <p className="forgot-password text-right">
-        Already registered <a href="#">log in?</a>
+        Already registered <a href="/sign-in">log in?</a>
       </p>
     </form>
   );

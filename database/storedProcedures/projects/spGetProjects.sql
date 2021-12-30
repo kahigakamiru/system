@@ -18,7 +18,7 @@ BEGIN
 	BEGIN
 		SELECT * FROM dbo.projects 
 		where _id = @project_id and isDeleted = 0
-		FOR JSON PATH, INCLUDE_NULL_VALUES
+		
 	END
 	ELSE
 	BEGIN
@@ -29,7 +29,7 @@ BEGIN
 			ORDER BY p._id
 			OFFSET (@PageNumber * @NumberOfRecordsPerPage) ROWS
 			FETCH NEXT @NumberOfRecordsPerPage ROWS ONLY
-			FOR JSON PATH, INCLUDE_NULL_VALUES
+			
 		END
 		ELSE
 		BEGIN
@@ -53,7 +53,9 @@ BEGIN
 			order by p._id
 			OFFSET (@PageNumber * @NumberOfRecordsPerPage) ROWS
 			FETCH NEXT @NumberOfRecordsPerPage ROWS ONLY
-			FOR JSON PATH, INCLUDE_NULL_VALUES
+			
 		END
 	END
 END
+
+EXEC getProjects @user_id = '2';

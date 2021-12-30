@@ -35,53 +35,55 @@ export default function Login(props) {
   }
 
   return (
-    <form onSubmit={handleLogin}>
-      <h3>Log in</h3>
+     <div className="sign-in">
+      <form onSubmit={handleLogin}>
+        <h3>Log in</h3>
 
-      <div className="form-group">
-        <label>Email</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => handleChangeEmail(e)}
-          className="form-control"
-          placeholder="Enter email"
-          required
-        />
-      </div>
-
-      <div className="form-group">
-        <label>Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => handleChangePassword(e)}
-          className="form-control"
-          placeholder="Enter password"
-          required
-        />
-      </div>
-
-      <div className="form-group">
-        <div className="custom-control custom-checkbox">
+        <div className="form-group">
+          <label>Email</label>
           <input
-            type="checkbox"
-            className="custom-control-input"
-            id="customCheck1"
+            type="email"
+            value={email}
+            onChange={(e) => handleChangeEmail(e)}
+            className="form-control"
+            placeholder="Enter email"
             required
           />
-          <label className="custom-control-label" htmlFor="customCheck1">
-            Remember me
-          </label>
         </div>
-      </div>
 
-      <button type="submit" className="btn btn-dark btn-lg btn-block">
-        Sign in
-      </button>
-      <p className="forgot-password text-right">
-        Forgot <Link to="/">password?</Link>
-      </p>
-    </form>
+        <div className="form-group">
+          <label>Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => handleChangePassword(e)}
+            className="form-control"
+            placeholder="Enter password"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <div className="custom-control custom-checkbox">
+            <input
+              type="checkbox"
+              className="custom-control-input"
+              id="customCheck1"
+              required
+            />
+            <label className="custom-control-label" htmlFor="customCheck1">
+              Remember me
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" className="btn btn-dark btn-lg btn-block">
+          Sign in
+        </button>
+        <p className="forgot-password text-right">
+          Forgot <Link to="/">password?</Link>
+        </p>
+      </form>
+    </div>
   );
 }

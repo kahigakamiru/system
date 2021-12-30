@@ -6,13 +6,27 @@ const parseResults = require("../helpers/parser");
 const _ = require("lodash");
 
 module.exports = {
+  getAllProjects: async (req, res) => {
+    try {
+      let result = await db.exec("getAllProjects");
+      console.log(result);
+      let resultData = result.recordsets;
+
+      res.status(200).json(resultData);
+    } catch (error) {
+      if (error.message) return res.status(500).json(error);
+      res.status(404).json(error);
+    }
+  },
   getProjects: async (req, res) => {
     try {
-      const { uid } = req.params;
+      const { uid } = req.query;
+      // console.log(uid);
       if (!uid) return res.status(400).send({ message: "User id is required" });
       let result = await db.exec("getProjects", { user_id: uid });
-      const projects = parseResults(result);
-      res.status(200).json({ projects });
+      const projects = result.recordset;
+      console.log(projects);
+      res.status(200).json(projects);
     } catch (error) {
       console.log(error);
       if (error.message) return res.status(500).json(error);
@@ -36,38 +50,30 @@ module.exports = {
     }
   },
   createProject: async (req, res) => {
+    console.log(req.body);
     const { error } = projectValidator(req.body);
+
     if (error)
       return res
         .status(400)
         .send({ success: false, message: error.details[0].message });
 
     try {
-      const userResult = await db.exec("getUser", {
-        userId: req.body.lead_user_id,
-      });
-      if (!userResult.recordset[0])
-        return res.status(400).send({ message: "invalid lead_user_id. " });
-
-      const {
-        name,
-        lead_user_id,
-        client_name,
-        start_date,
-        end_date,
-        description,
-      } = req.body;
+      const { name, start_date, end_date, description } = req.body;
       const id = uuidv4();
-      const result = await db.exec("createUpdateProjects", {
-        id,
-        name,
-        lead_user_id,
-        client_name,
-        start_date: new Date(start_date),
-        end_date: new Date(end_date),
-        description,
-      });
-      res.send({ message: "Project created successfully" });
+      const result = await db
+        .exec("createUpdateProjects", {
+          id,
+          name,
+          start_date: new Date(start_date),
+          end_date: new Date(end_date),
+          description,
+        })
+        .then((result) => {
+          if (result.rowsAffected) {
+            res.send("success");
+          }
+        });
     } catch (error) {
       console.log(error);
       res.status(500).send({ message: "Internal Server Error" });
@@ -78,8 +84,8 @@ module.exports = {
     const { error } = projectValidator(
       _.pick(req.body, [
         "name",
-        "lead_user_id",
-        "client_name",
+        // "lead_user_id",
+        // "client_name",
         "start_date",
         "end_date",
         "description",
@@ -104,19 +110,18 @@ module.exports = {
       const {
         name,
         _id,
-        lead_user_id,
-        client_name,
+        // lead_user_id,
+        // client_name,
         start_date,
         end_date,
         description,
       } = req.body;
 
-      
       await db.exec("createUpdateProjects", {
-        id:_id,
+        id: _id,
         name,
-        lead_user_id,
-        client_name,
+        // lead_user_id,
+        // client_name,
         start_date: new Date(start_date),
         end_date: new Date(end_date),
         description,
@@ -125,7 +130,9 @@ module.exports = {
       res.send({ message: "Project updated successfully" });
     } catch (error) {
       console.error(error);
-      res.status(500).send({ message: "Internal Server Error", error: error.message });
+      res
+        .status(500)
+        .send({ message: "Internal Server Error", error: error.message });
     }
   },
 

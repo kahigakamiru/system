@@ -1,124 +1,133 @@
-import React, { useEffect, useCallback } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link,
-
-} from "react-router-dom";
-import Dashboard from "./components/dashboard.component";
+import React, { Component } from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
 import Login from "./components/login.component";
 import Signup from "./components/signup.component";
-import Task from "./components/tasks.components";
-
-import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
-import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import "./App.css";
-
-import { logout } from "./redux/actions/auth";
-import { clearMessage } from "./redux/actions/message";
-
-import { history } from "./helpers/history";
-import EventBus from "./common/EventBus";
+import Dashboard from "./components/dashboard.component";
+import AuthService from "./services/auth.service";
 import Projects from "./components/projects.components";
+import Tasks from "./components/tasks.components";
+import Users from "./components/Users";
+import Home from "./components/Home"
+import CreateProjects from "./components/CreateProjects";
+import CreateTasks from "./components/CreateTasks";
+class App extends Component {
+  constructor(props) {
+    super(props);
 
-function App() {
- 
-  const handlelogout = () => {
-    localStorage.clear();
-  };
+    this.logOut = this.logOut.bind(this);
 
-  const { user: currentUser } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    history.listen((location) => {
-      dispatch(clearMessage()); // clear message when changing location
-    });
-  }, [dispatch]);
-
-  const logOut = useCallback(() => {
-    dispatch(logout());
-  }, [dispatch]);
-  useEffect(() => {
-    // if (currentUser) {
-    //   setShowAdminBoard(currentUser.user.isAdmin);
-    // } else {
-    //   setShowAdminBoard(false);
-    // }
-
-    EventBus.on("logout", () => {
-      logOut();
-    });
-
-    return () => {
-      EventBus.remove("logout");
+    this.state = {
+      showUserDashboard: false,
+      showAdminDashboard: false,
+      currentUser: undefined,
     };
-  }, [currentUser, logOut]);
-  // console.log(currentUser.user.isAdmin);
-  return (
-    <Router history={history}>
-      <div className="App">
-        {/* <nav className="navbar navbar-expand-lg navbar-light fixed-top">
-          <div className="container">
-            <Link className="navbar-brand" to={"/sign-in"}>
-              UserSystem
+  }
+
+  componentDidMount() {
+    const user = AuthService.getCurrentUser();
+   
+
+    if (user) {
+      this.setState({
+        currentUser: user,
+        showUserDashboard: user.user.isAdmin === false,
+        showAdminDashboard: user.user.isAdmin === true,
+      });
+    }
+  }
+
+  logOut() {
+    AuthService.logout();
+  }
+  render() {
+    const { currentUser, showUserDashboard, showAdminDashboard } = this.state;
+    return (
+      <Router>
+        <div>
+          <nav className="navbar navbar-expand navbar-light bg-light responsive-md">
+            <Link to={"/home"} className="navbar-brand">
+              Home
             </Link>
+
+            <div className="navbar-nav ml-auto">
+              {/* Add Admin and User DashBoards */}
+              {showUserDashboard && (
+                <li className="nav-item">
+                  <Link to={"/userdash"} className="nav-link">
+                    Rights: User
+                  </Link>
+                </li>
+              )}
+              {showAdminDashboard && (
+                <li className="nav-item">
+                  <Link to={"/admindash"} className="nav-link">
+                    Rights: Admin
+                  </Link>
+                </li>
+              )}
+            </div>
+
             {currentUser ? (
-              <div
-                className="collapse navbar-collapse"
-                id="navbarTogglerDemo02"
-              >
-                <ul className="navbar-nav ml-auto">
-                  <li className="nav-item">
-                    <Link
-                      className="nav-link"
-                      onClick={handlelogout}
-                      to="/sign-in"
-                    >
-                      Log Out
-                    </Link>
-                  </li>
-                </ul>
+              <div className="navbar-nav ml-auto">
+                <li className="nav-item">
+                  <Link to={"/userdash"} className="nav-link">
+                    {currentUser.user.username}'s Dashboard
+                  </Link>
+                </li>
+
+                <li className="nav-item">
+                  <a href="/login" className="nav-link" onClick={this.logOut}>
+                    LogOut
+                  </a>
+                </li>
               </div>
             ) : (
-              <div
-                className="collapse navbar-collapse"
-                id="navbarTogglerDemo02"
-              >
-                <ul className="navbar-nav ml-auto">
-                  <li className="nav-item">
-                    <Link className="nav-link" to={"/sign-in"}>
-                      Login
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link" to={"/sign-up"}>
-                      Sign up
-                    </Link>
-                  </li>
-                </ul>
+              <div className="navbar-nav ml-auto">
+                <li className="nav-item">
+                  <Link to={"/sign-in"} className="nav-link">
+                    Login
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to={"/sign-up"} className="nav-link">
+                    SignUp
+                  </Link>
+                </li>
               </div>
             )}
-          </div>
-        </nav> */}
+          </nav>
 
-        {/* <div className="outer">
-          <div className="inner"> */}
-        <Routes>
-          {/* <Route path="/" element={<Login />} />
+          <div className="container mt-3">
+            <Routes>
+              {/* <Route exact path={["/", "/home"]} component={App} /> */}
               <Route path="/sign-in" element={<Login />} />
-              <Route path="/sign-up" element={<Signup />} /> */}
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/tasks" element={<Task />} />
-          <Route path="/projects" element={<Projects />} />
-        </Routes>
-        {/* </div>
-        </div> */}
-      </div>
-    </Router>
-  );
+              <Route path="/sign-up" element={<Signup />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/dashboard/tasks" element={<Tasks />} />
+              <Route path="/dashboard/projects" element={<Projects />} />
+              <Route path="/dashboard/users" element={<Users />} />
+              <Route path="/dashboard/projects/createprojects" element={<CreateProjects />} />
+              <Route path="/dashboard/tasks/createtasks" element={<CreateTasks />} />
+              {/* <Route exact path="/admindash/gettasks" component={GetTasks} />
+              <Route
+                exact
+                path="/admindash/allprojects"
+                component={GetAllProjects}
+              />
+              <Route
+                exact
+                path="/admindash/getallusers"
+                component={GetAllUsers}
+              />
+              <Route exact path="/admindash/update" component={Updates} /> */}
+            </Routes>
+          </div>
+        </div>
+      </Router>
+    );
+  }
 }
 
 export default App;

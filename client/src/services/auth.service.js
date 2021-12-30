@@ -5,19 +5,13 @@ const API_URL = "http://localhost:3300/api/auth/";
 const register = (
   firstname,
   lastname,
-  age,
-  gender,
-  isAdmin,
   email,
   password
 ) => {
   return axios.post(API_URL + "register", {
     firstname,
-    email,
-    gender,
-    age,
     lastname,
-    isAdmin,
+    email,
     password,
   });
 };
@@ -29,7 +23,7 @@ const login = (email, password) => {
       password,
     })
     .then((response) => {
-      if (response.data.token) {
+      if (response.status === 200) {
         localStorage.setItem("user", JSON.stringify(response.data));
       }
 
@@ -40,9 +34,14 @@ const login = (email, password) => {
 const logout = () => {
   localStorage.removeItem("user");
 };
+const getCurrentUser = () => {
+    return JSON.parse(localStorage.getItem("user"));
+
+  }
 
 export default {
   register,
   login,
   logout,
+  getCurrentUser,
 };

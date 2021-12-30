@@ -19,28 +19,23 @@ module.exports = {
       const { recordset } = await db.exec("getUserByEmail", {
         email: req.body.email,
       });
-
-      const user = recordset[0];
-      if (user)
+      console.log(recordset);
+      if (recordset.length > 0)
         return res
           .status(404)
           .send({ message: "Account exists with the given email" });
 
       const salt = await bcrypt.genSalt(10);
       const password = await bcrypt.hash(req.body.password, salt);
-      const { firstname, email, age, lastname, isAdmin } = req.body;
+      const { firstname, email, lastname } = req.body;
       console.log(email);
       const id = uuidv4();
-      const admin = isAdmin ? 1 : 0;
       await db.exec("userRegister", {
         id,
         firstname,
         lastname,
-        password,
         email,
-        age,
-        isAdmin: admin,
-        isDeleted: 1,
+        password,
       });
       res.send({ message: "User registered successfully" });
     } catch (error) {
@@ -64,24 +59,21 @@ module.exports = {
     const { email, password } = req.body;
 
     const { recordset } = await db.exec("getUserByEmail", { email });
-
-    const user = recordset[0];
-    
-    if (!user) {
-      console.log(user);
+   
+    const user= recordset[0]
+    if (recordset.length === 0) {
       return res.status(404).send({ message: "Account does not exist" });
     } else {
       const validPassword = await bcrypt.compare(password, user.password);
-    if (!validPassword)
-      return res.status(404).send({ message: "Invalid email or password" });
+      if (!validPassword)
+        return res.status(404).send({ message: "Invalid email or password" });
 
-    const token = generateToken(user.email, user._id, user.isAdmin);
-    res.send({
-      user: _.pick(user, ["_id", "first", "last", "email", "age", "isAdmin"]),
-      token,
-    });
+      const token = generateToken(user.email, user._id, user.isAdmin);
+      res.send({
+        user: _.pick(user, ["_id", "first", "last", "email", "isAdmin"]),
+        token,
+      });
     }
-    
   },
 
   getLoggedUser: async (req, res) => {
@@ -92,7 +84,7 @@ module.exports = {
 
       const token = generateToken(user.email, user._id, user.isAdmin);
       res.send({
-        user: _.pick(user, ["_id", "first", "last", "email", "age", "isAdmin"]),
+        user: _.pick(user, ["_id", "first", "last", "email", "isAdmin"]),
         token,
       });
     } catch (error) {
@@ -169,8 +161,13 @@ module.exports = {
     }
   },
   getUsers: async (req, res) => {
-    let { recordset } = await db.exec("getUsers");
-    res.send({ users: recordset });
+    try {
+      let results = await db.exec("getUsers");
+      console.log(results.recordset);
+      res.send(results.recordset).status(200);
+    } catch (error) {
+      res.send(error.message).status(500);
+    }
   },
   getUser: async (req, res) => {
     const { id } = req.params;
