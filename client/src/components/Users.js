@@ -23,38 +23,31 @@ function Users() {
     }, 1000);
   }, []);
   return (
-    <div className="content-2">
-      <div className="recent-projects">
-        <div className="title">
-          <h2>Users</h2>
-        </div>
-        {/* <Button variant="primary" onClick={handleShow}>
-          Launch demo modal
-        </Button> */}
-
-        {/* <Modal show={show} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={handleClose}>
-              Save Changes
-            </Button>
-          </Modal.Footer>
-        </Modal> */}
+    <div>
+      <div
+        style={{
+          marginTop: "25px",
+          display: "flex",
+          justifyContent: "space-evenly",
+        }}
+      >
+        <Button variant="primary" size="lg">
+          Users
+        </Button>
+      </div>
+      <div
+        style={{
+          padding: "25px",
+        }}
+      >
         {data ? (
-          <Table responsive="sm">
+          <Table striped bordered hover size="sm">
             <thead>
               <tr>
                 <th>_id</th>
-                <th>Fname</th>
-                <th>Lname</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
                 <th>email</th>
-                <th>Age</th>
                 <th>isAdmin</th>
               </tr>
             </thead>
@@ -65,7 +58,7 @@ function Users() {
                   <td>{dat.first}</td>
                   <td>{dat.last}</td>
                   <td>{dat.email}</td>
-                  <td>{dat.age}</td>
+
                   <td>{dat.isAdmin == true ? "True" : "False"}</td>
                 </tr>
               ))}

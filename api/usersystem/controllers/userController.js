@@ -46,6 +46,7 @@ module.exports = {
     }
   },
   loginUser: async (req, res) => {
+    console.log(req.response);
     const schema = Joi.object().keys({
       email: Joi.string().email().required(),
       password: Joi.string().min(8).required(),
@@ -59,7 +60,7 @@ module.exports = {
     const { email, password } = req.body;
 
     const { recordset } = await db.exec("getUserByEmail", { email });
-   
+   console.log(recordset[0]);
     const user= recordset[0]
     if (recordset.length === 0) {
       return res.status(404).send({ message: "Account does not exist" });
@@ -73,6 +74,7 @@ module.exports = {
         user: _.pick(user, ["_id", "first", "last", "email", "isAdmin"]),
         token,
       });
+      
     }
   },
 

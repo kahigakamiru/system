@@ -4,6 +4,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { Button, Table, Container, InputGroup } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
+import { handledate } from "../helpers/date";
 
 function Task() {
   // let user = "659deef9-18fc-44b8-84c7-4f1abf5b723c";
@@ -38,20 +39,26 @@ function Task() {
     window.location.reload()
   };;
   return (
-    <Container>
-      <div>
-        {/* <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+    <div>
+      <div
+        style={{
+          marginTop: "25px",
+          display: "flex",
+          justifyContent: "space-evenly",
+        }}
+      >
         <Link to="/dashboard/tasks/createtasks">
           <Button variant="primary" size="lg">
             Add Tasks
           </Button>
         </Link>
-        <Link to="/dashboard/tasks/updatetasks">
-          <Button variant="secondary" size="lg">
-            Update Project
-          </Button>
-        </Link>
-      </div> */}
+      </div>
+      <div
+        style={{
+          marginTop: "25px",
+          padding: "25px"
+        }}
+      >
         {taskData ? (
           <Table striped bordered hover size="sm">
             <thead>
@@ -71,8 +78,8 @@ function Task() {
                 <tr>
                   <td>{taskDat.name}</td>
                   <td>{taskDat.project_id}</td>
-                  <td>{taskDat.start_date}</td>
-                  <td>{taskDat.end_date}</td>
+                  <td>{handledate(taskDat.start_date)}</td>
+                  <td>{handledate(taskDat.end_date)}</td>
                   <td>{taskDat.description}</td>
                   <td>
                     <Link to={`/dashboard/tasks/updatetasks/${taskDat._id}`}>
@@ -82,7 +89,7 @@ function Task() {
                     </Link>
                   </td>
                   <td>
-                    <InputGroup.Radio aria-label="Radio button for following text input" />
+                    {/* <InputGroup.Radio aria-label="Radio button for following text input" /> */}
                     <Button variant="danger">Complete</Button>
                   </td>
                   <td>
@@ -100,13 +107,8 @@ function Task() {
         ) : (
           "no data"
         )}
-        <Link to="/dashboard/tasks/createtasks">
-          <Button variant="primary" size="lg">
-            Add Tasks
-          </Button>
-        </Link>
       </div>
-    </Container>
+    </div>
   );
 }
 

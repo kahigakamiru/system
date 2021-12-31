@@ -3,6 +3,7 @@ import { Button, Modal, Form, Table , Container} from "react-bootstrap";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { handledate } from "../helpers/date";
 
 function Projects() {
   const [show, setShow] = useState(false);
@@ -30,20 +31,27 @@ function Projects() {
  
  
   return (
-    <Container>
+   
       <div>
-        <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+        <div
+          style={{
+            marginTop: "25px",
+            display: "flex",
+            justifyContent: "space-evenly",
+          }}
+        >
           <Link to="/dashboard/projects/createprojects">
             <Button variant="primary" size="lg">
               Add Project
             </Button>
           </Link>
-          {""}
-          <Button variant="secondary" size="lg">
-            Update Project
-          </Button>
         </div>
-        <div>
+        <div
+          style={{
+          marginTop: "25px",
+            padding: "25px"
+          }}
+        >
           {data ? (
             <Table striped bordered hover size="sm">
               <thead>
@@ -61,9 +69,12 @@ function Projects() {
                   <tr>
                     <td>{dat.name}</td>
                     {/* <td>{dat.lead_user_id}</td> */}
-                    <td>{dat.start_date}</td>
-                    <td>{dat.end_date}</td>
+                    <td>{handledate(dat.start_date)}</td>
+                    <td>{handledate(dat.end_date)}</td>
                     <td>{dat.description}</td>
+                    <td>
+                      <Button variant="primary">Update</Button>
+                    </td>
                     <td>
                       <Button variant="primary">Complete</Button>
                     </td>
@@ -79,7 +90,7 @@ function Projects() {
           )}
         </div>
       </div>
-    </Container>
+   
   );
 }
 

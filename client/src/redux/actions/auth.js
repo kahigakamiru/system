@@ -6,20 +6,20 @@ import {
   LOGOUT,
   SET_MESSAGE,
 } from "../types";
-
+import { useNavigate } from "react-router-dom";
 import AuthService from "../../services/auth.service";
 
 export const register =
-  (firstname, lastname, email, isAdmin, password) => (dispatch) => {
+  (firstname, lastname, email, password) => (dispatch) => {
+    // const Navigate = useNavigate();
     return AuthService.register(
       firstname,
       lastname,
       email,
-      isAdmin,
-
       password
     ).then(
       (response) => {
+       
         dispatch({
           type: REGISTER_SUCCESS,
         });
@@ -28,6 +28,7 @@ export const register =
           type: SET_MESSAGE,
           payload: response.data.message,
         });
+        // Navigate("/sign-in");
 
         return Promise.resolve();
       },

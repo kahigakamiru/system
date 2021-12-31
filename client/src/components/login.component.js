@@ -22,20 +22,25 @@ export default function Login(props) {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // setState({ email: "", password: "" });
 
-    dispatch(login(email, password)); /* .then(() => {
-     
-      props.history.push("/dashboard");
+    dispatch(login(email, password)).then(() => {
       window.location.reload();
-    }); */
+      props.history.push("/dashboard");
+    });
   };
+
   if (isLoggedIn) {
     return <Navigate to="/dashboard" />;
   }
 
   return (
-     <div className="sign-in">
+    <div
+      style={{
+        margin: "25px auto",
+        padding: "50px",
+        maxWidth: "450px",
+      }}
+    >
       <form onSubmit={handleLogin}>
         <h3>Log in</h3>
 
@@ -51,7 +56,14 @@ export default function Login(props) {
           />
         </div>
 
-        <div className="form-group">
+        <div
+          className="form-group"
+          style={{
+            margin: "25px auto",
+            // padding: "50px",
+            // maxWidth: "450px",
+          }}
+        >
           <label>Password</label>
           <input
             type="password"
@@ -77,7 +89,13 @@ export default function Login(props) {
           </div>
         </div>
 
-        <button type="submit" className="btn btn-dark btn-lg btn-block">
+        <button
+          type="submit"
+          className="btn btn-primary btn-lg btn-block"
+          style={{
+            margin: "25px auto",
+          }}
+        >
           Sign in
         </button>
         <p className="forgot-password text-right">

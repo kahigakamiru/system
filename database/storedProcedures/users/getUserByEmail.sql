@@ -6,6 +6,7 @@ as
 begin
 	select	_id,
 			password,
+			first,
 			email,
 			isAdmin
 	from	[dbo].users  where email = @email;

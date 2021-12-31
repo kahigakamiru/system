@@ -46,109 +46,92 @@ class App extends Component {
   }
   render() {
     const { currentUser, showUserDashboard, showAdminDashboard } = this.state;
+    console.log(currentUser);
     return (
       <Router>
-        <Container>
-          <Navbar>
-            <Link to={"/home"} className="navbar-brand">
-              Home
-            </Link>
-
-            <div className="navbar-nav ml-auto">
-              {showUserDashboard && (
-                <li className="nav-item">
-                  <Link to={"/userdash"} className="nav-link">
-                    Rights: User
-                  </Link>
-                </li>
-              )}
-              {showAdminDashboard && (
-                <li className="nav-item">
-                  <Link to={"/admindash"} className="nav-link">
-                    Rights: Admin
-                  </Link>
-                </li>
-              )}
-            </div>
-
-            {currentUser ? (
-              <div className="navbar-nav ml-auto">
-                <li className="nav-item">
-                  <Link to={"/userdash"} className="nav-link">
-                    {currentUser.user.username}'s Dashboard
-                  </Link>
-                </li>
-
-                <li className="nav-item">
-                  <a href="/login" className="nav-link" onClick={this.logOut}>
-                    LogOut
-                  </a>
-                </li>
-              </div>
-            ) : (
-              <div className="navbar-nav ml-auto">
-                <li className="nav-item">
-                  <Link to={"/sign-in"} className="nav-link">
-                    Login
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to={"/sign-up"} className="nav-link">
-                    SignUp
-                  </Link>
-                </li>
-              </div>
+        <Navbar
+          className="navbar"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            background: "#346aff",
+            color: "white",
+          }}
+        >
+          <Link to={"/home"} className="navbar-brand">
+            Home
+          </Link>
+          <div className="navbar-nav ml-auto">
+            {showUserDashboard && (
+              <li className="nav-item">
+                <Link to={"/dashboard"} className="nav-link">
+                  Rights:User
+                </Link>
+              </li>
             )}
-          </Navbar>
-          {/* <Navbar>
-            <Container>
-              <Navbar.Brand href="#home">Navbar with text</Navbar.Brand>
-              <Navbar.Toggle />
-              <Navbar.Collapse className="justify-content-end">
-                <Navbar.Text>
-                  Signed in as: <a href="#login">Mark Otto</a>
-                </Navbar.Text>
-              </Navbar.Collapse>
-            </Container>
-          </Navbar> */}
-
-          <div>
-            <Routes>
-              {/* <Route exact path={["/", "/home"]} component={App} /> */}
-              <Route path="/sign-in" element={<Login />} />
-              <Route path="/sign-up" element={<Signup />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/dashboard/tasks" element={<Tasks />} />
-              <Route path="/dashboard/projects" element={<Projects />} />
-              <Route path="/dashboard/users" element={<Users />} />
-              <Route path="/home" element={<Home />} />
-              <Route
-                path="/dashboard/projects/createprojects"
-                element={<CreateProjects />}
-              />
-              <Route
-                path="/dashboard/tasks/createtasks"
-                element={<CreateTasks />}
-              />
-              <Route
-                path="/dashboard/tasks/updatetasks/:task_id"
-                element={<UpdateTasks />}
-              />
-              {/* <Route exact path="/admindash/gettasks" component={GetTasks} />
-              <Route
-                exact
-                path="/admindash/allprojects"
-                component={GetAllProjects}
-              />
-              <Route
-                exact
-                path="/admindash/getallusers"
-                component={GetAllUsers}
-              />
-              <Route exact path="/admindash/update" component={Updates} /> */}
-            </Routes>
+            {showAdminDashboard && (
+              <li className="nav-item">
+                <Link to={"/dashboard"} className="nav-link">
+                  Rights:Admin
+                </Link>
+              </li>
+            )}
           </div>
-        </Container>
+          {currentUser ? (
+            <div className="navbar-nav ml-auto">
+              <li className="nav-item">
+                <Link to={"/home"} className="nav-link">
+                  {currentUser.user.first}'s Dashboard
+                </Link>
+              </li>
+
+              <li className="nav-item">
+                <a href="/home" className="nav-link" onClick={this.logOut}>
+                  <button type="button" class="btn btn-light btn-sm">
+                    LogOut
+                  </button>
+                </a>
+              </li>
+            </div>
+          ) : (
+            <div className="navbar-nav ml-auto">
+              <li className="nav-item">
+                <Link to={"/sign-in"} className="nav-link">
+                  Login
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to={"/sign-up"} className="nav-link">
+                  SignUp
+                </Link>
+              </li>
+            </div>
+          )}
+        </Navbar>
+
+        <div>
+          <Routes>
+            <Route path="/sign-in" element={<Login />} />
+            <Route path="/sign-up" element={<Signup />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard/tasks" element={<Tasks />} />
+            <Route path="/dashboard/projects" element={<Projects />} />
+            <Route path="/dashboard/users" element={<Users />} />
+            <Route path="/home" element={<Home />} />
+            <Route
+              path="/dashboard/projects/createprojects"
+              element={<CreateProjects />}
+            />
+            <Route
+              path="/dashboard/tasks/createtasks"
+              element={<CreateTasks />}
+            />
+            <Route
+              path="/dashboard/tasks/updatetasks/:task_id"
+              element={<UpdateTasks />}
+            />
+          </Routes>
+        </div>
       </Router>
     );
   }

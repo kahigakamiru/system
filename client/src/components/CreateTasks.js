@@ -9,7 +9,7 @@ function CreateTasks() {
   const [endDate, setEnd] = useState();
   const [taskDescription, setDescription] = useState();
   const [data, setData] = useState();
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
   // console.log(data);
   useEffect(() => {
     setTimeout(async () => {
@@ -35,8 +35,8 @@ function CreateTasks() {
       })
       .then((res) => {
         console.log(res.data);
-        if (res.data === "success") {
-          Navigate("/dashboard/projects");
+        if (res.data.message === "Task created successfully") {
+          navigate("/dashboard/tasks");
         }
       });
   };
