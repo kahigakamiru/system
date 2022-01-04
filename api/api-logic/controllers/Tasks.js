@@ -10,6 +10,7 @@ module.exports = {
       let result = await db.exec("getTasks");
       // console.log(result);
       let resultData = result.recordsets;
+      console.log(resultData);
 
       res.status(200).json(resultData);
     } catch (error) {
@@ -169,6 +170,42 @@ module.exports = {
       res
         .status(500)
         .send({ error: error.message, message: "Internal Sever Error" });
+    }
+  },
+  // assignTask: async (req, res) => {
+  // 	try {
+  // 		const { userID, taskID} = req.body;
+  // 		// const pool = await mssql.connect(sqlConfig);
+  // 		const data = await pool
+  // 			.request()
+  // 			.input("taskID", mssql.int, taskID)
+  // 			.input("userID", mssql.varchar, userID)
+  // 			.execute("dbo.spAssignTask");
+  // 		res.status(200).send({
+  // 			message: `Task assigned to the user with the id of ${userID}: ${data}`,
+  // 		});
+  // 	} catch (error) {
+  // 		res.status(500).send({ message: error.message });
+  // 	}
+  // }
+  assignTask: async (req, res) => {
+    _.pick(req.body, ["taskID", "userID"]);
+    if (!req.body)
+      return res
+        .status(400)
+        .send({ success: false, message: "taskID is required" });
+
+    try {
+      const { taskID, userID } = req.body;
+      console.log(req.body);
+      await db.exec("assignTasks", {
+        taskID,
+        userID,
+      });
+      res.send({ message: "Task assigned successfully" });
+    } catch (error) {
+      // console.log(error.message);
+      res.status(500).send({ message: error.message });
     }
   },
 };

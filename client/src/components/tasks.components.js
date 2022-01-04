@@ -5,39 +5,50 @@ import { Link } from "react-router-dom";
 import { Button, Table, Container, InputGroup } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { handledate } from "../helpers/date";
+import { deleteTask, getTasks } from "../redux/actions/tasks";
+import AssignTasks from "./AssignTasks";
 
 function Task() {
   // let user = "659deef9-18fc-44b8-84c7-4f1abf5b723c";
-  const [taskData, setTaskData] = useState();
+  // const [taskData, setTaskData] = useState();\
   const dispatch = useDispatch();
   const Navigate = useNavigate();
-  useEffect(() => {
-    setTimeout(async () => {
-      await axios({
-        url: "http://localhost:8000/api/tasks/all",
-        method: "GET",
-      }).then((res) => {
-        // console.log(res.data);
-        setTaskData(res.data[0]);
-        // console.log(res.data[0]);
-        // console.log(res.taskData[0]);
-      });
-    }, 1000);
-  }, []);
+  
+  const { tasks } = useSelector((state) => state.task);
+  console.log(tasks);
+  let taskData = tasks;
+
+  // const handleAssignTasks = async (taskID, userID) => {
+  //   console.log(taskID, userID);
+  //   await axios
+  //     .put("http://localhost:8000/api/tasks/assign", {
+  //       taskID,
+  //       userID,
+  //     })
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       if (res.data === "success") {
+  //         Navigate("/dashboard/tasks");
+  //       }
+  //     });
+  //   window.location.reload();
+  // };
   const handleDeleteTasks = async (task_id) => {
-    console.log(task_id);
-    await axios
-      .put("http://localhost:8000/api/tasks/delete", {
-          task_id,
-      })
-      .then((res) => {
-        console.log(res.data);
-        if (res.data === "success") {
-          Navigate("/dashboard/tasks");
-        }
-      });
-    window.location.reload()
-  };;
+    dispatch(deleteTask(task_id))
+  //   // console.log(task_id);
+  //   await axios
+  //     .put("http://localhost:8000/api/tasks/delete", {
+  //       task_id,
+  //     })
+  //     .then((res) => {
+  //       // task;
+  //       console.log(res.data);
+  //       if (res.data === "success") {
+  //         Navigate("/dashboard/tasks");
+  //       }
+  //     });
+  //   // window.location.reload();
+  };
   return (
     <div>
       <div
@@ -56,7 +67,7 @@ function Task() {
       <div
         style={{
           marginTop: "25px",
-          padding: "25px"
+          padding: "25px",
         }}
       >
         {taskData ? (
@@ -68,8 +79,8 @@ function Task() {
                 <th>start_date</th>
                 <th>end_date</th>
                 <th>Description</th>
-                <th>Update Project</th>
-                <th>Complete</th>
+                <th>Update Task</th>
+                <th>Assign</th>
                 <th>Delete</th>
               </tr>
             </thead>
@@ -89,8 +100,17 @@ function Task() {
                     </Link>
                   </td>
                   <td>
-                    {/* <InputGroup.Radio aria-label="Radio button for following text input" /> */}
-                    <Button variant="danger">Complete</Button>
+                    {!taskDat.isAssigned ? (
+                      // <Button
+                      //   onClick={() => handleAssignTasks(taskDat._id,)}
+                      //   variant="info"
+                      // >
+                      //   Assign
+                      // </Button>
+                      <AssignTasks taskID={taskDat._id} />
+                    ) : (
+                      <Button> UnAssign</Button>
+                    )}
                   </td>
                   <td>
                     <Button

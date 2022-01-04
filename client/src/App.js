@@ -15,6 +15,7 @@ import CreateTasks from "./components/CreateTasks";
 import UpdateTasks from "./components/UpdateTasks";
 import Navbar from "react-bootstrap/Navbar";
 import { Button, Table, Container } from "react-bootstrap";
+import AssignTasks from "./components/AssignTasks";
 
 class App extends Component {
   constructor(props) {
@@ -46,7 +47,7 @@ class App extends Component {
   }
   render() {
     const { currentUser, showUserDashboard, showAdminDashboard } = this.state;
-    console.log(currentUser);
+    // console.log(currentUser);
     return (
       <Router>
         <Navbar
@@ -117,6 +118,7 @@ class App extends Component {
             <Route path="/dashboard/tasks" element={<Tasks />} />
             <Route path="/dashboard/projects" element={<Projects />} />
             <Route path="/dashboard/users" element={<Users />} />
+            <Route path="/dashboard/tasks/assign" element={<AssignTasks />} />
             <Route path="/home" element={<Home />} />
             <Route
               path="/dashboard/projects/createprojects"

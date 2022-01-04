@@ -9,6 +9,7 @@ const {
   updateTask,
   deleteTask,
   completeTask,
+  assignTask
 } = require("../controllers/Tasks");
 
 logicTasks.get("/all", getAllTasks);
@@ -18,5 +19,6 @@ logicTasks.post("/create", createTask);
 logicTasks.put("/", updateTask);
 logicTasks.put("/delete", deleteTask);
 logicTasks.put("/complete", completeTask);
+logicTasks.put("/assign", assignTask);
 
 module.exports = { logicTasks };

@@ -5,21 +5,17 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   SET_MESSAGE,
+  GET_USERS,
 } from "../types";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../../services/auth.service";
+import axios from "axios";
 
 export const register =
   (firstname, lastname, email, password) => (dispatch) => {
     // const Navigate = useNavigate();
-    return AuthService.register(
-      firstname,
-      lastname,
-      email,
-      password
-    ).then(
+    return AuthService.register(firstname, lastname, email, password).then(
       (response) => {
-       
         dispatch({
           type: REGISTER_SUCCESS,
         });
@@ -93,4 +89,15 @@ export const logout = () => (dispatch) => {
   dispatch({
     type: LOGOUT,
   });
+};
+
+export const getUsers = () => async (dispatch) => {
+  try {
+    let { data } = await axios.get("http://localhost:3300/api/auth/all");
+
+    dispatch({
+      type: GET_USERS,
+      payload: data,
+    });
+  } catch (error) {}
 };
